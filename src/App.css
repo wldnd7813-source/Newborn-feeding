@@ -1057,3 +1057,15 @@ footer {
 .comment-write button {
   width: 100%;
 }
+
+/* 로딩 */
+.loading {
+  text-align: center;
+  padding: 20px;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.admin-mode .loading {
+  color: #a0aaf7;
+}
