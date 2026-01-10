@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import AdminStats from './AdminStats';
 
-function Calculator({ onNavigate, onAdminMode }) {
+function Calculator({ onNavigate, onAdminMode, isAdmin }) {
   const [weight, setWeight] = useState('');
   const [mlPerKg, setMlPerKg] = useState('');
   const [status, setStatus] = useState('stay');
@@ -83,11 +84,14 @@ function Calculator({ onNavigate, onAdminMode }) {
   };
 
   return (
-    <div className="container">
-      <header>
-        <div className="header-icon">🍼</div>
-        <h1>신생아 수유량 계산기</h1>
-      </header>
+  <div className="container">
+    <header>
+      <div className="header-icon">🍼</div>
+      <h1>신생아 수유량 계산기</h1>
+    </header>
+
+    {/* 관리자 통계 */}
+    {isAdmin && <AdminStats />}
 
       <div className="card">
         <div className="input-group">

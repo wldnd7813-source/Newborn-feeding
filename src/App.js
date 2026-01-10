@@ -1,12 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import Calculator from './Calculator';
 import Suggestions from './Suggestions';
+import { supabase } from './supabaseClient';
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState('calculator');
   const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    // 방문 기록 저장
+    const trackVisit = async () => {
+      try {
+        await supabase
+          .from('visitors')
+          .insert([
+            { user_agent: navigator.userAgent }
+          ]);
+      } catch (error) {
+        console.error('Error tracking visit:', error);
+      }
+    };
+
+    trackVisit();
+  }, []);
 
   const navigateTo = (page) => {
     setCurrentPage(page);
@@ -73,7 +91,7 @@ function App() {
       {/* 메인 컨텐츠 */}
       <div className="main-content">
         {currentPage === 'calculator' && (
-          <Calculator onNavigate={navigateTo} onAdminMode={enableAdminMode} />
+          <Calculator onNavigate={navigateTo} onAdminMode={enableAdminMode} isAdmin={isAdmin} />
         )}
         {currentPage === 'suggestions' && (
           <Suggestions isAdmin={isAdmin} />
