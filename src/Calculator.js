@@ -15,7 +15,7 @@ function Calculator({ onNavigate, onAdminMode, isAdmin }) {
     { label: "13:00", min: 780, icon: "🍼" },
     { label: "16:00", min: 960, icon: "🍼" },
     { label: "19:00", min: 1140, icon: "🍼" },
-    { label: "23:00", min: 1380, icon: "🍼" },
+    { label: "22:00", min: 1380, icon: "🍼" },
     { label: "02:00", min: 1560, icon: "🍼" },
     { label: "05:00", min: 1740, icon: "🍼" }
   ];
@@ -211,7 +211,7 @@ function Calculator({ onNavigate, onAdminMode, isAdmin }) {
             {result.feeds.map((f, idx) => (
               <div 
                 key={idx} 
-                className={`feed-row ${["02:00","05:00"].includes(f.time) ? "night" : ""}`}
+                className={`feed-row ${["16:00","19:00"].includes(f.time) ? "night" : ""}`}
               >
                 <div className="feed-time">
                   <span className="feed-icon">{f.icon}</span>
