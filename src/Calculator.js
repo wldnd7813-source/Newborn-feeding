@@ -176,7 +176,10 @@ function Calculator({ onNavigate, onAdminMode, isAdmin }) {
             <select 
               disabled={status === 'stay'}
               value={admissionHour}
-              onChange={(e) => setAdmissionHour(e.target.value)}
+              onChange={(e) => {
+                setAdmissionHour(e.target.value);
+                setAdmissionMinute('0'); // 시간 선택 시 분을 00으로 자동 설정
+              }}
             >
               <option value="">시</option>
               {Array.from({length: 24}, (_, i) => (
