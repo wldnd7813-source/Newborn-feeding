@@ -488,7 +488,6 @@ button:active {
   background: var(--night);
   margin: 0 -24px;
   padding: 16px 24px;
-  border-left: 4px solid var(--primary);
 }
 
 .night .feed-time {
@@ -780,7 +779,6 @@ footer {
 
 .admin-mode .night {
   background: rgba(102, 126, 234, 0.1);
-  border-left-color: #667eea;
 }
 
 .admin-mode .night .feed-time {
