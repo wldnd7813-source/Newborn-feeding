@@ -68,7 +68,7 @@ body {
 .hamburger-btn span {
   display: block;
   width: 22px;
-  height: 2.5px;
+  height: 3px;
   background: #546E7A;
   border-radius: 3px;
   transition: all 0.3s ease;
@@ -1158,4 +1158,41 @@ footer {
   .stat-value {
     font-size: 24px;
   }
+}
+
+/* 전체 너비 작성 버튼 */
+.submit-full-btn {
+  width: 100%;
+  padding: 16px;
+  font-size: 17px;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: white;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 24px rgba(0, 102, 255, 0.25);
+  letter-spacing: -0.3px;
+  font-family: 'Noto Sans KR', sans-serif;
+  margin-top: 24px;
+}
+
+.submit-full-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(0, 102, 255, 0.35);
+}
+
+.submit-full-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 16px rgba(0, 102, 255, 0.3);
+}
+
+.admin-mode .submit-full-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+}
+
+.admin-mode .submit-full-btn:hover {
+  box-shadow: 0 12px 32px rgba(102, 126, 234, 0.4);
 }

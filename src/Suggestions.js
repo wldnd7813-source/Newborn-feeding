@@ -251,11 +251,15 @@ function Suggestions({ isAdmin }) {
           <div className="suggestions-header">
             <h2>개선사항 작성</h2>
             <button 
-              className="submit-btn"
-              onClick={handleWrite}
+              className="back-btn"
+              onClick={() => {
+                setTitle('');
+                setContent('');
+                setView('list');
+              }}
               disabled={loading}
             >
-              ✅ 작성
+              ← 뒤로가기
             </button>
           </div>
 
@@ -289,15 +293,11 @@ function Suggestions({ isAdmin }) {
             </div>
 
             <button 
-              className="cancel-btn"
-              onClick={() => {
-                setTitle('');
-                setContent('');
-                setView('list');
-              }}
+              className="submit-full-btn"
+              onClick={handleWrite}
               disabled={loading}
             >
-              취소
+              ✅ 작성
             </button>
           </div>
         </>
