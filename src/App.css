@@ -1194,3 +1194,225 @@ footer {
 .admin-mode .submit-full-btn:hover {
   box-shadow: 0 12px 32px rgba(102, 126, 234, 0.4);
 }
+
+/* ============================================ */
+/* 수액량 계산기 */
+/* ============================================ */
+
+.fluid-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  background: var(--bg-card);
+  padding: 8px;
+  border-radius: 16px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+}
+
+.fluid-tab {
+  flex: 1;
+  padding: 12px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  transition: all 0.2s ease;
+}
+
+.fluid-tab:hover {
+  background: var(--primary-light);
+  color: var(--primary);
+  transform: none;
+  box-shadow: none;
+}
+
+.fluid-tab.active {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 102, 255, 0.3);
+}
+
+.fluid-tab.active:hover {
+  transform: none;
+}
+
+.fluid-input-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.fluid-input-row input {
+  flex: 1;
+}
+
+.fluid-input-row select {
+  width: 80px;
+  flex: none;
+}
+
+.fluid-divider {
+  font-size: 18px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  flex: none;
+}
+
+.fluid-ratio-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.fluid-ratio-row input {
+  flex: 1;
+}
+
+.fluid-ratio-colon {
+  font-size: 20px;
+  color: var(--text-secondary);
+  font-weight: 700;
+  flex: none;
+}
+
+.fluid-preset-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.fluid-preset-btn {
+  flex: 1;
+  padding: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--bg-main);
+  color: var(--text-secondary);
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: none;
+  transition: all 0.2s ease;
+}
+
+.fluid-preset-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-light);
+  transform: none;
+  box-shadow: none;
+}
+
+.fluid-preset-btn:active {
+  transform: scale(0.97);
+  box-shadow: none;
+}
+
+.fluid-btn-secondary {
+  background: linear-gradient(135deg, var(--secondary) 0%, #059669 100%);
+  box-shadow: 0 8px 24px rgba(0, 194, 168, 0.25);
+}
+
+.fluid-btn-secondary:hover {
+  box-shadow: 0 12px 32px rgba(0, 194, 168, 0.35);
+}
+
+.fluid-change-item {
+  background: var(--bg-main);
+  padding: 14px 16px;
+  border-radius: 12px;
+  margin-top: 8px;
+  border-left: 4px solid var(--primary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fluid-change-info {
+  flex: 1;
+}
+
+.fluid-change-time {
+  font-weight: 700;
+  color: var(--primary);
+  font-size: 16px;
+  font-family: 'Archivo', sans-serif;
+}
+
+.fluid-change-volume {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin-top: 2px;
+}
+
+.fluid-btn-danger {
+  width: auto;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  background: #ff4757;
+  border-radius: 10px;
+  box-shadow: none;
+  margin-left: 12px;
+}
+
+.fluid-btn-danger:hover {
+  background: #ff3838;
+  box-shadow: none;
+}
+
+/* 수액량 계산기 - 관리자 모드 */
+.admin-mode .fluid-tabs {
+  background: #16213e;
+  border-color: #2d3561;
+}
+
+.admin-mode .fluid-tab {
+  color: #b8b8d1;
+}
+
+.admin-mode .fluid-tab:hover {
+  background: rgba(102, 126, 234, 0.15);
+  color: #a0aaf7;
+}
+
+.admin-mode .fluid-tab.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.admin-mode .fluid-preset-btn {
+  background: #0f1626;
+  border-color: #2d3561;
+  color: #b8b8d1;
+}
+
+.admin-mode .fluid-preset-btn:hover {
+  border-color: #667eea;
+  color: #a0aaf7;
+  background: rgba(102, 126, 234, 0.15);
+}
+
+.admin-mode .fluid-change-item {
+  background: #0f1626;
+  border-left-color: #667eea;
+}
+
+.admin-mode .fluid-change-time {
+  color: #a0aaf7;
+}
+
+.admin-mode .fluid-change-volume {
+  color: #b8b8d1;
+}
+
+.admin-mode .fluid-btn-secondary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import Calculator from './Calculator';
 import Suggestions from './Suggestions';
+import FluidCalculator from './FluidCalculator';
 import { supabase } from './supabaseClient';
 
 function App() {
@@ -65,13 +66,19 @@ function App() {
           <h2>메뉴</h2>
         </div>
         <nav className="menu-list">
-          <button 
+          <button
             className={currentPage === 'calculator' ? 'active' : ''}
             onClick={() => navigateTo('calculator')}
           >
             🍼 신생아 수유량 계산기
           </button>
-          <button 
+          <button
+            className={currentPage === 'ivfluid' ? 'active' : ''}
+            onClick={() => navigateTo('ivfluid')}
+          >
+            💉 수액량 계산기
+          </button>
+          <button
             className={currentPage === 'suggestions' ? 'active' : ''}
             onClick={() => navigateTo('suggestions')}
           >
@@ -92,6 +99,9 @@ function App() {
       <div className="main-content">
         {currentPage === 'calculator' && (
           <Calculator onNavigate={navigateTo} onAdminMode={enableAdminMode} isAdmin={isAdmin} />
+        )}
+        {currentPage === 'ivfluid' && (
+          <FluidCalculator />
         )}
         {currentPage === 'suggestions' && (
           <Suggestions isAdmin={isAdmin} />
