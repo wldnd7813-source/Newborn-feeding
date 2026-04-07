@@ -3,6 +3,7 @@ import './App.css';
 import Calculator from './Calculator';
 import Suggestions from './Suggestions';
 import FluidCalculator from './FluidCalculator';
+import CIVCalculator from './CIVCalculator';
 import { supabase } from './supabaseClient';
 
 function App() {
@@ -79,6 +80,12 @@ function App() {
             💉 수액량 계산기
           </button>
           <button
+            className={currentPage === 'civ' ? 'active' : ''}
+            onClick={() => navigateTo('civ')}
+          >
+            💊 CIV 약물 계산기
+          </button>
+          <button
             className={currentPage === 'suggestions' ? 'active' : ''}
             onClick={() => navigateTo('suggestions')}
           >
@@ -102,6 +109,9 @@ function App() {
         )}
         {currentPage === 'ivfluid' && (
           <FluidCalculator />
+        )}
+        {currentPage === 'civ' && (
+          <CIVCalculator />
         )}
         {currentPage === 'suggestions' && (
           <Suggestions isAdmin={isAdmin} />
