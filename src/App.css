@@ -1416,3 +1416,375 @@ footer {
 .admin-mode .fluid-btn-secondary {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
+/* ═══════════════════════════════════════
+   CIV 약물 계산기
+═══════════════════════════════════════ */
+
+.civ-outer {
+  width: 100%;
+  animation: slideIn 0.6s ease-out;
+}
+
+/* 체중 입력바 */
+.civ-weight-bar {
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  padding: 0 20px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-sm);
+}
+
+.civ-weight-bar-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 12px 0;
+}
+
+.civ-weight-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.civ-weight-input-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  background: var(--bg-main);
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  padding: 4px 12px;
+}
+
+.civ-weight-input {
+  width: 64px;
+  font-size: 20px;
+  font-weight: 600;
+  font-family: 'Archivo', monospace;
+  color: var(--text-primary);
+  border: none;
+  background: transparent;
+  text-align: right;
+  outline: none;
+  padding: 0;
+  -moz-appearance: textfield;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.civ-weight-input:focus {
+  border: none;
+  box-shadow: none;
+  background: transparent;
+}
+
+.civ-weight-input::-webkit-outer-spin-button,
+.civ-weight-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+.civ-weight-unit {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-family: 'Archivo', monospace;
+}
+
+.civ-weight-presets {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.civ-preset {
+  padding: 4px 10px;
+  font-size: 12px;
+  font-family: 'Archivo', monospace;
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all .15s;
+  font-weight: 500;
+}
+
+.civ-preset:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.civ-preset.active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+/* 메인 콘텐츠 */
+.civ-main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 20px 20px 40px;
+}
+
+.civ-section-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin: 24px 0 12px;
+}
+
+.civ-section-label:first-of-type { margin-top: 0; }
+
+/* 약물 그리드 */
+.civ-drug-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 12px;
+}
+
+/* 약물 카드 */
+.civ-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px 18px;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s ease;
+}
+
+.civ-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.civ-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.civ-drug-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.civ-drug-meta {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+  font-family: 'Archivo', monospace;
+}
+
+/* 배지 */
+.civ-badge {
+  font-size: 10px;
+  font-family: 'Archivo', monospace;
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.civ-badge-amber {
+  background: #FFF8E7;
+  color: #9A5800;
+  border: 1px solid #F0C060;
+}
+
+.civ-badge-teal {
+  background: #EAF7F2;
+  color: #0A6648;
+  border: 1px solid #6DD4AA;
+}
+
+.civ-badge-purple {
+  background: #F0EEFF;
+  color: #4A35B0;
+  border: 1px solid #B0A0F0;
+}
+
+.civ-badge-blue {
+  background: #E8F3FF;
+  color: #1A5FA8;
+  border: 1px solid #80B8F0;
+}
+
+/* 믹스 버튼 */
+.civ-mix-row {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.civ-mix-btn {
+  padding: 3px 9px;
+  font-size: 11px;
+  font-family: 'Archivo', monospace;
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all .1s;
+  font-weight: 500;
+}
+
+.civ-mix-btn.base {
+  border-color: var(--text-secondary);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.civ-mix-btn.active {
+  background: var(--text-primary);
+  color: #fff;
+  border-color: var(--text-primary);
+}
+
+/* 도즈 테이블 */
+.civ-dose-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+
+.civ-dose-table th {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-align: right;
+  padding: 3px 8px;
+  border-bottom: 1px solid var(--border);
+  font-family: 'Archivo', monospace;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.civ-dose-table th:first-child { text-align: left; }
+
+.civ-dose-table td {
+  padding: 4px 8px;
+  text-align: right;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border);
+  font-family: 'Archivo', monospace;
+  font-size: 12px;
+}
+
+.civ-dose-table td:first-child { text-align: left; color: var(--text-secondary); }
+.civ-dose-table tr:last-child td { border-bottom: none; }
+
+/* 하이라이트 색상 */
+.civ-hl-amber  { background: #FFF8E7; color: #9A5800 !important; font-weight: 600; border-radius: 3px; }
+.civ-hl-teal   { background: #EAF7F2; color: #0A6648 !important; font-weight: 600; border-radius: 3px; }
+.civ-hl-purple { background: #F0EEFF; color: #4A35B0 !important; font-weight: 600; border-radius: 3px; }
+.civ-hl-blue   { background: #E8F3FF; color: #1A5FA8 !important; font-weight: 600; border-radius: 3px; }
+.civ-hl-active { background: var(--text-primary); color: #fff !important; font-weight: 600; border-radius: 3px; }
+
+/* RI 카드 */
+.civ-ri-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.civ-ri-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.civ-ri-field label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.civ-ri-field input {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 15px;
+  font-family: 'Archivo', monospace;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-main);
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color .15s;
+  box-shadow: none;
+}
+
+.civ-ri-field input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.civ-ri-glu {
+  background: var(--bg-main);
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  border: 1px solid var(--border);
+}
+
+.civ-ri-glu-label { font-size: 13px; font-weight: 600; color: var(--text-secondary); }
+.civ-ri-glu-val   { font-size: 22px; font-weight: 700; color: var(--text-primary); font-family: 'Archivo', monospace; }
+.civ-ri-glu-unit  { font-size: 12px; color: var(--text-secondary); font-family: 'Archivo', monospace; }
+
+.civ-ri-section-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: 6px;
+  margin-top: 4px;
+}
+
+.civ-ri-table { margin-bottom: 12px; }
+
+.civ-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 14px 0;
+}
+
+/* 푸터 */
+.civ-footer {
+  margin-top: 24px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-family: 'Archivo', monospace;
+  text-align: center;
+}
+
+/* 모바일 대응 */
+@media (max-width: 480px) {
+  .civ-drug-grid {
+    grid-template-columns: 1fr;
+  }
+  .civ-weight-bar-inner {
+    gap: 8px;
+  }
+  .civ-ri-inputs {
+    grid-template-columns: 1fr 1fr;
+  }
+}

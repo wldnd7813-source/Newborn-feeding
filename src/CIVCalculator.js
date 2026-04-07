@@ -1,229 +1,256 @@
 import React, { useState } from 'react';
 
-const DRUG_DEFAULTS = {
-  dopamine: {
-    amount: 200,
-    unit: 'mg',
-    ml: 5,
-    ratioDrug: 1,
-    presets: [
-      { drug: 0.5, label: '0.5:9.5' },
-      { drug: 1, label: '1:9' },
-      { drug: 2, label: '2:8' }
-    ],
-    doseUnit: '(mcg/kg/min)'
+const WEIGHT_PRESETS = [0.5, 0.8, 1.0, 1.5, 2.0, 3.0];
+const FACTOR_OPTIONS = [0.5, 1, 2, 3, 4, 5];
+
+const DRUGS = [
+  {
+    key: 'dopa', name: 'Dopamine', unit: 'mcg/kg/min', color: 'amber',
+    doses: [1, 2, 2.5, 3, 4, 5, 7.5, 10, 12.5, 15, 17.5, 20],
+    coeff: 0.0075, defaultFactor: 1,
   },
-  fentanyl: {
-    amount: 500,
-    unit: 'mcg',
-    ml: 10,
-    ratioDrug: 2,
-    presets: [
-      { drug: 1, label: '1:9' },
-      { drug: 2, label: '2:8' },
-      { drug: 3, label: '3:7' }
-    ],
-    doseUnit: '(mcg/kg/min)'
-  }
-};
+  {
+    key: 'dobu', name: 'Dobuject', unit: 'mcg/kg/min', color: 'amber',
+    doses: [1, 2, 2.5, 3, 4, 5, 7.5, 10, 12.5, 15, 17.5, 20],
+    coeff: 0.012, defaultFactor: 1,
+  },
+  {
+    key: 'fenta', name: 'Fentanyl', unit: 'mcg/kg/hr', color: 'purple',
+    doses: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    coeff: 0.1, defaultFactor: 1,
+  },
+  {
+    key: 'mida', name: 'Midazolam', unit: 'mcg/kg/min', color: 'amber',
+    doses: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    coeff: 0.06, defaultFactor: 1,
+  },
+  {
+    key: 'epi', name: 'Epinephrine', unit: 'mcg/kg/min', color: 'amber',
+    doses: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+    coeff: 0.6, defaultFactor: 1,
+  },
+];
 
 function CIVCalculator() {
-  const [drugType, setDrugType] = useState('dopamine');
-  const [civWeight, setCivWeight] = useState('');
-  const [civDrugAmount, setCivDrugAmount] = useState('200');
-  const [civDrugUnit, setCivDrugUnit] = useState('mg');
-  const [civDrugMl, setCivDrugMl] = useState('5');
-  const [civRatioDrug, setCivRatioDrug] = useState('1');
-  const [civRatioDilution, setCivRatioDilution] = useState('9');
-  const [civDose, setCivDose] = useState('');
-  const [civResult, setCivResult] = useState(null);
+  const [weight, setWeight] = useState('1.0');
+  const [factors, setFactors] = useState({ dopa: 1, dobu: 1, fenta: 1, mida: 1, epi: 1, eglandin: 1 });
+  const [priMix, setPriMix] = useState('1:4');
+  const [riGIR, setRiGIR] = useState('6');
+  const [riRatio, setRiRatio] = useState(6);
 
-  const handleDrugChange = (type) => {
-    const defaults = DRUG_DEFAULTS[type];
-    setDrugType(type);
-    setCivDrugAmount(String(defaults.amount));
-    setCivDrugUnit(defaults.unit);
-    setCivDrugMl(String(defaults.ml));
-    setCivRatioDrug(String(defaults.ratioDrug));
-    setCivRatioDilution(String(10 - defaults.ratioDrug));
-    setCivResult(null);
+  const w = parseFloat(weight) || 1.0;
+  const r2 = (v) => (Math.round(v * 100) / 100).toFixed(2);
+
+  const setFactor = (key, val) => setFactors(prev => ({ ...prev, [key]: val }));
+
+  const DrugCard = ({ drug }) => {
+    const h = factors[drug.key];
+    return (
+      <div className="civ-card">
+        <div className="civ-card-head">
+          <div>
+            <div className="civ-drug-name">{drug.name}</div>
+            <div className="civ-drug-meta">×{h} 희석</div>
+          </div>
+          <span className={`civ-badge civ-badge-${drug.color}`}>{drug.unit}</span>
+        </div>
+        <div className="civ-mix-row">
+          {FACTOR_OPTIONS.map(opt => (
+            <button
+              key={opt}
+              className={`civ-mix-btn${opt === drug.defaultFactor ? ' base' : ''}${h === opt ? ' active' : ''}`}
+              onClick={() => setFactor(drug.key, opt)}
+            >
+              {opt}
+            </button>
+          ))}
+        </div>
+        <table className="civ-dose-table">
+          <thead>
+            <tr><th>Dose</th><th>cc/hr</th></tr>
+          </thead>
+          <tbody>
+            {drug.doses.map(d => (
+              <tr key={d}>
+                <td>{d}</td>
+                <td className={`civ-hl-${drug.color}`}>{r2(drug.coeff * w * d * h)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
   };
 
-  const handleRatioChange = (value) => {
-    const v = parseFloat(value) || 0;
-    if (v > 10) {
-      setCivRatioDrug('10');
-      setCivRatioDilution('0');
-    } else {
-      setCivRatioDrug(value);
-      setCivRatioDilution((10 - v).toFixed(1));
-    }
+  const PrimacorCard = () => {
+    const is14 = priMix === '1:4';
+    return (
+      <div className="civ-card">
+        <div className="civ-card-head">
+          <div>
+            <div className="civ-drug-name">Primacor</div>
+            <div className="civ-drug-meta">{priMix} mix</div>
+          </div>
+          <span className="civ-badge civ-badge-amber">mcg/kg/min</span>
+        </div>
+        <div className="civ-mix-row">
+          <button className={`civ-mix-btn base${is14 ? ' active' : ''}`} onClick={() => setPriMix('1:4')}>1:4</button>
+          <button className={`civ-mix-btn${!is14 ? ' active' : ''}`} onClick={() => setPriMix('1:9')}>1:9</button>
+        </div>
+        <table className="civ-dose-table">
+          <thead><tr><th>Dose</th><th>cc/hr</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>0.5</td>
+              <td className="civ-hl-amber">{r2(is14 ? 0.15 * w : 0.15 * 2.25 * w)}</td>
+            </tr>
+            <tr>
+              <td>0.75</td>
+              <td className="civ-hl-amber">{r2(is14 ? 0.22 * w : 0.22 * 2.25 * w)}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    );
   };
 
-  const setRatioPreset = (drugValue) => {
-    setCivRatioDrug(String(drugValue));
-    setCivRatioDilution(String(10 - drugValue));
+  const EglandinCard = () => {
+    const h = factors.eglandin;
+    return (
+      <div className="civ-card">
+        <div className="civ-card-head">
+          <div>
+            <div className="civ-drug-name">Eglandin</div>
+            <div className="civ-drug-meta">×{h} 희석</div>
+          </div>
+          <span className="civ-badge civ-badge-teal">ng/kg/min</span>
+        </div>
+        <div className="civ-mix-row">
+          {FACTOR_OPTIONS.map(opt => (
+            <button
+              key={opt}
+              className={`civ-mix-btn${opt === 1 ? ' base' : ''}${h === opt ? ' active' : ''}`}
+              onClick={() => setFactor('eglandin', opt)}
+            >
+              {opt}
+            </button>
+          ))}
+        </div>
+        <table className="civ-dose-table">
+          <thead><tr><th>Dose</th><th>cc/hr</th></tr></thead>
+          <tbody>
+            {[1, 2, 3, 4, 5].map(d => (
+              <tr key={d}>
+                <td>{d}</td>
+                <td className="civ-hl-teal">{r2(2 * d * w * 60 / 1000 * h)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
   };
 
-  const calculateCIV = () => {
-    const weight = parseFloat(civWeight);
-    const drugAmount = parseFloat(civDrugAmount);
-    const drugMl = parseFloat(civDrugMl);
-    const ratioDrug = parseFloat(civRatioDrug);
-    const ratioDilution = parseFloat(civRatioDilution);
-    const targetDose = parseFloat(civDose);
-
-    if (!weight || !drugAmount || !drugMl || !targetDose) {
-      alert('모든 값을 입력해주세요.');
-      return;
-    }
-
-    const stockConc = drugAmount / drugMl;
-    const finalConc = stockConc * (ratioDrug / 10);
-
-    let pumpRate;
-    if (civDrugUnit === 'mg') {
-      const targetDoseMg = targetDose / 1000;
-      const requiredDrugMgMin = targetDoseMg * weight;
-      pumpRate = (requiredDrugMgMin / finalConc) * 60;
-    } else {
-      const requiredDrugMcgMin = targetDose * weight;
-      pumpRate = (requiredDrugMcgMin / finalConc) * 60;
-    }
-
-    const drugPerHour = (targetDose * weight * 60) / (civDrugUnit === 'mg' ? 1000 : 1);
-
-    setCivResult({
-      stockConc,
-      ratioDrug,
-      ratioDilution,
-      finalConc,
-      pumpRate,
-      drugPerHour,
-      unit: civDrugUnit
-    });
-  };
-
-  const currentDrug = DRUG_DEFAULTS[drugType];
+  const gluGday = (parseFloat(riGIR) || 0) * 60 * 24 / 1000 * w;
+  const riRatioNum = parseInt(riRatio) || 1;
 
   return (
-    <div className="container">
-      <header>
-        <div className="header-icon">💊</div>
-        <h1>CIV 약물 계산기</h1>
-      </header>
-
-      <div className="card">
-        <div className="input-group">
-          <label>약물 선택</label>
-          <select value={drugType} onChange={(e) => handleDrugChange(e.target.value)}>
-            <option value="dopamine">Dopamine</option>
-            <option value="fentanyl">Fentanyl</option>
-          </select>
-        </div>
-
-        <div className="input-group">
-          <label>체중 <span className="label-badge">kg</span></label>
-          <input
-            type="number" step="0.01" inputMode="decimal"
-            placeholder="예: 2.5"
-            value={civWeight}
-            onChange={(e) => setCivWeight(e.target.value)}
-          />
-        </div>
-
-        <div className="input-group">
-          <label>원액 농도</label>
-          <div className="fluid-input-row">
+    <div className="civ-outer">
+      {/* 상단 체중 입력바 */}
+      <div className="civ-weight-bar">
+        <div className="civ-weight-bar-inner">
+          <span className="civ-weight-label">기준 체중</span>
+          <div className="civ-weight-input-wrap">
             <input
-              type="number" step="1" inputMode="numeric"
-              placeholder="약물량"
-              value={civDrugAmount}
-              onChange={(e) => setCivDrugAmount(e.target.value)}
+              className="civ-weight-input"
+              type="number"
+              value={weight}
+              min="0.1" max="10" step="0.01"
+              onChange={(e) => setWeight(e.target.value)}
+              inputMode="decimal"
             />
-            <select value={civDrugUnit} onChange={(e) => setCivDrugUnit(e.target.value)}>
-              <option value="mg">mg</option>
-              <option value="mcg">mcg</option>
-            </select>
-            <span className="fluid-divider">/</span>
-            <input
-              type="number" step="0.1" inputMode="decimal"
-              placeholder="mL"
-              value={civDrugMl}
-              onChange={(e) => setCivDrugMl(e.target.value)}
-            />
+            <span className="civ-weight-unit">kg</span>
           </div>
-        </div>
-
-        <div className="input-group">
-          <label>희석 비율 <span className="label-badge">합계 10</span></label>
-          <div className="fluid-ratio-row">
-            <input
-              type="number" step="0.5" inputMode="decimal"
-              placeholder="원액"
-              value={civRatioDrug}
-              onChange={(e) => handleRatioChange(e.target.value)}
-            />
-            <span className="fluid-ratio-colon">:</span>
-            <input
-              type="number" readOnly
-              value={civRatioDilution}
-              style={{ background: '#E1E8ED' }}
-            />
-          </div>
-          <div className="fluid-preset-buttons">
-            {currentDrug.presets.map((preset, idx) => (
+          <div className="civ-weight-presets">
+            {WEIGHT_PRESETS.map(p => (
               <button
-                key={idx}
-                className="fluid-preset-btn"
-                onClick={() => setRatioPreset(preset.drug)}
+                key={p}
+                className={`civ-preset${Math.abs(w - p) < 0.001 ? ' active' : ''}`}
+                onClick={() => setWeight(String(p))}
               >
-                {preset.label}
+                {p}
               </button>
             ))}
           </div>
         </div>
-
-        <div className="input-group">
-          <label>목표 투여량 <span className="label-badge">{currentDrug.doseUnit}</span></label>
-          <input
-            type="number" step="0.1" inputMode="decimal"
-            placeholder="예: 5"
-            value={civDose}
-            onChange={(e) => setCivDose(e.target.value)}
-          />
-        </div>
-
-        <button onClick={calculateCIV}>💫 계산하기</button>
       </div>
 
-      {civResult && (
-        <div className="result">
-          <div className="result-header">
-            <div className="result-title">CIV 약물 계산 결과</div>
-            <div className="result-value">{civResult.pumpRate.toFixed(2)} mL/hr</div>
-            <div className="result-subvalue">펌프 속도</div>
-          </div>
-          <div className="feed-list">
-            <div className="feed-row">
-              <div className="feed-time">원액 농도</div>
-              <div className="feed-volume">{civResult.stockConc.toFixed(civResult.unit === 'mg' ? 1 : 0)} {civResult.unit}/mL</div>
-            </div>
-            <div className="feed-row">
-              <div className="feed-time">희석 비율</div>
-              <div className="feed-volume">{civResult.ratioDrug} : {civResult.ratioDilution}</div>
-            </div>
-            <div className="feed-row">
-              <div className="feed-time">최종 농도</div>
-              <div className="feed-volume">{civResult.finalConc.toFixed(civResult.unit === 'mg' ? 3 : 2)} {civResult.unit}/mL</div>
-            </div>
-            <div className="feed-row">
-              <div className="feed-time">시간당 약물량</div>
-              <div className="feed-volume">{civResult.drugPerHour.toFixed(civResult.unit === 'mg' ? 3 : 2)} {civResult.unit}/hr</div>
-            </div>
-          </div>
+      <div className="civ-main">
+        {/* 약물 섹션 */}
+        <div className="civ-section-label">승압제 · 진통제 · 진정제</div>
+        <div className="civ-drug-grid">
+          {DRUGS.map(drug => <DrugCard key={drug.key} drug={drug} />)}
+          <PrimacorCard />
+          <EglandinCard />
         </div>
-      )}
+
+        {/* RI 모듈 */}
+        <div className="civ-section-label">Continuous RI Module</div>
+        <div className="civ-ri-card">
+          <div className="civ-ri-inputs">
+            <div className="civ-ri-field">
+              <label>GIR (mg/kg/min)</label>
+              <input
+                type="number" value={riGIR} min="0" max="20" step="0.5"
+                onChange={(e) => setRiGIR(e.target.value)}
+                inputMode="decimal"
+              />
+            </div>
+            <div className="civ-ri-field">
+              <label>Glu : RI 비율</label>
+              <input
+                type="number" value={riRatio} min="1" max="12" step="1"
+                onChange={(e) => setRiRatio(parseInt(e.target.value) || 1)}
+                inputMode="numeric"
+              />
+            </div>
+          </div>
+          <div className="civ-ri-glu">
+            <span className="civ-ri-glu-label">Glucose</span>
+            <span className="civ-ri-glu-val">{r2(gluGday)}</span>
+            <span className="civ-ri-glu-unit">g/day</span>
+          </div>
+          <div className="civ-ri-section-title">RI 농도별 속도 · {riRatioNum}:1 (Glu:RI) 기준</div>
+          <table className="civ-dose-table civ-ri-table">
+            <thead><tr><th>RI 농도</th><th>cc/hr</th></tr></thead>
+            <tbody>
+              {[0.25, 0.5, 1].map(conc => (
+                <tr key={conc}>
+                  <td>{conc} IU/mL</td>
+                  <td className="civ-hl-blue">{r2(gluGday / riRatioNum / conc / 24)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <hr className="civ-divider" />
+          <div className="civ-ri-section-title">Glu:RI 비율별 속도 · 0.5 IU/mL 기준</div>
+          <table className="civ-dose-table civ-ri-table">
+            <thead><tr><th>Glu : RI</th><th>cc/hr</th></tr></thead>
+            <tbody>
+              {[1, 2, 4, 6, 8, 10, 12].map(rt => (
+                <tr key={rt} onClick={() => setRiRatio(rt)} style={{ cursor: 'pointer' }}>
+                  <td className={rt === riRatioNum ? 'civ-hl-active' : ''}>{rt} : 1</td>
+                  <td className={rt === riRatioNum ? 'civ-hl-active' : 'civ-hl-blue'}>{r2(gluGday / rt / 0.5 / 24)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="civ-footer">
+          ※ 본 계산기는 임상 참고용입니다. 투약 전 반드시 처방 및 프로토콜을 확인하세요.
+        </div>
+      </div>
     </div>
   );
 }
