@@ -294,13 +294,19 @@ function CIVCalculator() {
         </div>
 
         {/* 약물 선택 */}
-        <div className="input-group" style={{ marginBottom: drug?.type === 'ri' ? '0' : '24px' }}>
+        <div className="input-group" style={{ marginBottom: '8px' }}>
           <label>약물 선택</label>
-          <select value={selectedDrug} onChange={(e) => handleDrugChange(e.target.value)}>
+          <div className="civ2-drug-grid">
             {DRUGS.map(d => (
-              <option key={d.key} value={d.key}>{d.name}</option>
+              <button
+                key={d.key}
+                className={`civ2-drug-btn${selectedDrug === d.key ? ' active' : ''}`}
+                onClick={() => handleDrugChange(d.key)}
+              >
+                {d.name}
+              </button>
             ))}
-          </select>
+          </div>
         </div>
 
         {/* 약물별 옵션 */}
