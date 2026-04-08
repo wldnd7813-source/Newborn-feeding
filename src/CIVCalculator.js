@@ -49,12 +49,6 @@ const DRUGS = [
 
 const FACTOR_OPTIONS = [0.5, 1, 2, 3, 4, 5];
 
-const COLOR_MAP = {
-  amber:  { badge: 'civ-badge-amber',  hl: 'civ-hl-amber' },
-  teal:   { badge: 'civ-badge-teal',   hl: 'civ-hl-teal' },
-  purple: { badge: 'civ-badge-purple', hl: 'civ-hl-purple' },
-  blue:   { badge: 'civ-badge-blue',   hl: 'civ-hl-blue' },
-};
 
 function CIVCalculator() {
   const [weight, setWeight] = useState('');
