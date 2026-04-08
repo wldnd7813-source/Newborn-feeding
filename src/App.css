@@ -1788,3 +1788,80 @@ footer {
     grid-template-columns: 1fr 1fr;
   }
 }
+
+/* ═══════════════════════════════════════
+   CIV 계산기 v2 (콤보박스형)
+═══════════════════════════════════════ */
+
+.civ2-option-group {
+  margin-top: 16px;
+}
+
+.civ2-option-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+  display: block;
+}
+
+.civ2-factor-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.civ2-factor-btn {
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-main);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all .15s;
+  font-family: 'Archivo', sans-serif;
+}
+
+.civ2-factor-btn.base {
+  border-color: var(--text-secondary);
+  color: var(--text-primary);
+}
+
+.civ2-factor-btn.active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px rgba(0, 102, 255, 0.3);
+}
+
+.civ2-ri-options {
+  margin-top: 16px;
+}
+
+/* 결과 값 색상 */
+.civ2-result-val {
+  font-weight: 700;
+  font-size: 15px;
+  border-radius: 6px;
+  padding: 2px 8px;
+}
+
+.civ2-val-amber  { color: #9A5800 !important; background: #FFF8E7; }
+.civ2-val-teal   { color: #0A6648 !important; background: #EAF7F2; }
+.civ2-val-purple { color: #4A35B0 !important; background: #F0EEFF; }
+.civ2-val-blue   { color: #1A5FA8 !important; background: #E8F3FF; }
+.civ2-val-active { color: #fff    !important; background: var(--primary); }
+
+.civ2-row-active {
+  background: var(--primary-light);
+}
+
+.civ-footer {
+  margin-top: 16px;
+  margin-bottom: 8px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  text-align: center;
+}
