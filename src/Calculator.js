@@ -42,6 +42,7 @@ function Calculator({ onNavigate, onAdminMode, isAdmin }) {
   // 나머지 코드...
 
     const daily = roundUp5(w * m);
+    const displayDaily = Math.ceil(w * m);
     let effective = daily;
     let feeds = [];
 
@@ -80,7 +81,7 @@ function Calculator({ onNavigate, onAdminMode, isAdmin }) {
       feeds[i].volume += 5;
     }
 
-    setResult({ daily, effective, feeds });
+    setResult({ daily, displayDaily, effective, feeds });
   };
 
   return (
@@ -207,7 +208,7 @@ function Calculator({ onNavigate, onAdminMode, isAdmin }) {
         <div className="result">
           <div className="result-header">
             <div className="result-title">일일 총 수유량</div>
-            <div className="result-value">{result.daily} mL</div>
+            <div className="result-value">{result.displayDaily} mL</div>
             <div className="result-subvalue">적용량: {result.effective} mL</div>
           </div>
           <div className="feed-list">
